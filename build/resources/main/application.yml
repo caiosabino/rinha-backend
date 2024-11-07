@@ -1,0 +1,7 @@
+spring:
+  application:
+    name: rinha-backend
+
+  data:
+    mongodb:
+      uri: mongodb://root:example@localhost:27017/rinha_db?authSource=admin
