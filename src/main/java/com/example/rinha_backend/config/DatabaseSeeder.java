@@ -14,10 +14,10 @@ public class DatabaseSeeder implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        usuarioRepository.save(new Usuario(100000L, 0L));
-        usuarioRepository.save(new Usuario(80000L, 0L));
-        usuarioRepository.save(new Usuario(1000000L, 0L));
-        usuarioRepository.save(new Usuario( 10000000L, 0L));
-        usuarioRepository.save(new Usuario(500000L, 0L));
+        usuarioRepository.save(new Usuario("1",100000L, 0L));
+        usuarioRepository.save(new Usuario("2",80000L, 0L));
+        usuarioRepository.save(new Usuario("3",1000000L, 0L));
+        usuarioRepository.save(new Usuario("4",10000000L, 0L));
+        usuarioRepository.save(new Usuario("5",500000L, 0L));
     }
 }

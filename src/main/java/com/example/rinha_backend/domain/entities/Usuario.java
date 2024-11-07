@@ -9,7 +9,8 @@ public class Usuario {
     private Long limite;
     private Long saldo;
 
-    public Usuario(Long limite, Long saldo) {
+    public Usuario(String id, Long limite, Long saldo) {
+        this.id = id;
         this.limite = limite;
         this.saldo = saldo;
     }
