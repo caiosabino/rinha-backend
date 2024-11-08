@@ -30,4 +30,10 @@ public class ClientesController {
     public ExtratoResponse extrato(@PathVariable String id) {
         return clientesService.processExtrato(id);
     }
+
+    private void validateId(String id) {
+        if(id == null || id.isEmpty() || Long.parseLong(id) < 1){
+            throw new IllegalArgumentException("id inválido");
+        }
+    }
 }

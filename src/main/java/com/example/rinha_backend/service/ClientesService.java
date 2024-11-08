@@ -48,7 +48,6 @@ public class ClientesService {
         List<UltimasTransacoesDto> ultimasTransacoesDto = new ArrayList<>();
         ultimasTransacoes.forEach(ut -> ultimasTransacoesDto.add(new UltimasTransacoesDto(ut.getValor(), ut.getTipo(), ut.getDescricao(), DateUtils.formatLocalDateTimeToString(ut.getRealizadaEm()))));
 
-
         return new ExtratoResponse(saldo, ultimasTransacoesDto);
     }
 
