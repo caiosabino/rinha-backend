@@ -23,11 +23,13 @@ public class ClientesController {
     @PostMapping("/{id}/transacoes")
     @ResponseStatus(HttpStatus.OK)
     public TransacoesReponse transacoes(@PathVariable String id, @RequestBody TransacoesRequest body) {
+        validateId(id);
         return clientesService.processTransacao(id, body);
     }
 
     @GetMapping("/{id}/extrato")
     public ExtratoResponse extrato(@PathVariable String id) {
+        validateId(id);
         return clientesService.processExtrato(id);
     }
 
