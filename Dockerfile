@@ -1,16 +1,18 @@
-# Etapa 1: Usar uma imagem base do Java
-FROM openjdk:17-jdk-slim AS build
-
-# Etapa 2: Configurar o diretório de trabalho no container
+# Etapa 1: Build
+FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
 
-RUN ./gradlew build
-# Etapa 3: Copiar o JAR da aplicação (da sua máquina local ou build)
-# Copie o arquivo JAR para dentro do container
-COPY build/libs/rinha-backend-0.0.1-SNAPSHOT.jar /app/rinha-backend.jar
+# Copia todos os arquivos do projeto para o diretório de trabalho do contêiner
+COPY . .
+# Executa o build do Gradle para gerar o arquivo .jar
+RUN gradle build --no-daemon
 
-# Etapa 4: Expôr a porta que sua aplicação vai rodar
+# Etapa 2: Runtime
+FROM openjdk:17-jdk-slim
+WORKDIR /app
+# Copia o .jar gerado na etapa de build para o diretório de trabalho do novo contêiner
+COPY --from=build /app/build/libs/*.jar app.jar
+# Expõe a porta que a aplicação irá usar (por exemplo, 8080)
 EXPOSE 8080
-
-# Etapa 5: Definir o comando de execução da aplicação
-ENTRYPOINT ["java", "-jar", "/app/rinha-backend.jar"]
+# Comando para rodar a aplicação
+ENTRYPOINT ["java", "-jar", "app.jar"]
