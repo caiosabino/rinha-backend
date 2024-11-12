@@ -34,4 +34,22 @@ public class TransacoesRequest {
     public String getDescricao() {
         return descricao;
     }
+
+    public void validateBodyParameters() {
+        if(this.getValor() == null || this.getDescricao() == null || this.getTipo() == null){
+            throw new IllegalArgumentException("parâmetros inválidos");
+        }
+
+        if(this.getDescricao().length() > 10) {
+            throw new IllegalArgumentException("descrição deve ter no máximo 10 caracteres");
+        }
+
+        if(!this.getTipo().equals("c") && !this.getTipo().equals("d")){
+            throw new IllegalArgumentException("tipo de transação inválido");
+        }
+
+        if(this.getValor() != Math.floor(this.getValor())){
+            throw new IllegalArgumentException("valor deve ser um número inteiro");
+        }
+    }
 }

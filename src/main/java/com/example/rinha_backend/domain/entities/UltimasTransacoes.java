@@ -1,19 +1,21 @@
 package com.example.rinha_backend.domain.entities;
 import java.time.LocalDateTime;
-import org.springframework.data.annotation.Id;
+import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 @Document(collection = "ultimas_transacoes")
 public class UltimasTransacoes {
-    @Id
-    private String id;
+    @MongoId
+    private Long id;
     private Long usuarioId;
     private Long valor;
     private String tipo;
     private String descricao;
     private LocalDateTime realizadaEm;
 
-    public UltimasTransacoes(Long usuarioId, Long valor, String tipo, String descricao, LocalDateTime realizadaEm) {
+    public UltimasTransacoes(Long id, Long usuarioId, Long valor, String tipo, String descricao, LocalDateTime realizadaEm) {
+        this.id = id;
         this.usuarioId = usuarioId;
         this.valor = valor;
         this.tipo = tipo;
@@ -21,11 +23,11 @@ public class UltimasTransacoes {
         this.realizadaEm = realizadaEm;
     }
 
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
