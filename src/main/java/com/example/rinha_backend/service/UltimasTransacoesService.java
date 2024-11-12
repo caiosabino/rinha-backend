@@ -36,7 +36,6 @@ public class UltimasTransacoesService {
         return ultimasTransacoesRepository.findFirstByUsuarioIdOrderByIdDesc(id).orElse(null);
     }
 
-
     public UltimasTransacoes save(UltimasTransacoes ultimasTransacoes) {
         return ultimasTransacoesRepository.save(ultimasTransacoes);
     }
