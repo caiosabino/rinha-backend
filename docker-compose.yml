@@ -2,10 +2,11 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
+    env_file: /Users/csabino/Documents/workspace/dev.env
     environment:
       MONGO_INITDB_DATABASE: rinha_db
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: example
+      MONGO_INITDB_ROOT_USERNAME: $DB_USER
+      MONGO_INITDB_ROOT_PASSWORD: $DB_PASS
     ports:
       - "27017:27017"
     volumes:
@@ -20,7 +21,7 @@ services:
       dockerfile: Dockerfile
     container_name: app1
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongodb:27017/rinha_db?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/rinha_db?authSource=admin
     depends_on:
       - mongodb
     ports:
@@ -34,7 +35,7 @@ services:
       dockerfile: Dockerfile
     container_name: app2
     environment:
-      SPRING_DATA_MONGODB_URI: mongodb://root:example@mongodb:27017/rinha_db?authSource=admin
+      SPRING_DATA_MONGODB_URI: mongodb://${DB_USER}:${DB_PASS}@mongodb:27017/rinha_db?authSource=admin
     depends_on:
       - mongodb
     ports:

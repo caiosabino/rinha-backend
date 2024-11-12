@@ -2,15 +2,14 @@ package com.example.rinha_backend.domain.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection = "usuario")
-public class Usuario {
+@Document(collection = "usuarios")
+public class Usuarios {
     @Id
     private String id;
     private Long limite;
     private Long saldo;
 
-    public Usuario(String id, Long limite, Long saldo) {
-        this.id = id;
+    public Usuarios(Long limite, Long saldo) {
         this.limite = limite;
         this.saldo = saldo;
     }

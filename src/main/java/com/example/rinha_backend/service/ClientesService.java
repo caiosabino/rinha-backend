@@ -1,9 +1,9 @@
 package com.example.rinha_backend.service;
 
 import com.example.rinha_backend.domain.entities.UltimasTransacoes;
-import com.example.rinha_backend.domain.entities.Usuario;
+import com.example.rinha_backend.domain.entities.Usuarios;
 import com.example.rinha_backend.domain.repository.UltimasTransacoesRepository;
-import com.example.rinha_backend.domain.repository.UsuarioRepository;
+import com.example.rinha_backend.domain.repository.UsuariosRepository;
 import com.example.rinha_backend.dto.extrato.ExtratoResponse;
 import com.example.rinha_backend.dto.extrato.Saldo;
 import com.example.rinha_backend.dto.extrato.UltimasTransacoesDto;
@@ -21,31 +21,31 @@ import org.springframework.web.client.ResourceAccessException;
 @Service
 public class ClientesService {
     @Autowired
-    private UsuarioRepository usuarioRepository;
+    private UsuariosRepository usuariosRepository;
     @Autowired
     private UltimasTransacoesRepository ultimasTransacoesRepository;
 
     @Transactional
-    public TransacoesReponse processTransacao(String id, TransacoesRequest body){
+    public TransacoesReponse processTransacao(Long id, TransacoesRequest body){
         validateBodyParameters(body);
 
-        Usuario usuario = usuarioRepository.findById(id)
-                                           .orElseThrow(() -> new ResourceAccessException("usuário não encontrado"));
+        Usuarios usuarios = usuariosRepository.findById(id)
+                                              .orElseThrow(() -> new ResourceAccessException("usuário não encontrado"));
 
-        usuario = processTransaction(usuario, body);
+        usuarios = processTransaction(usuarios, body);
 
-        TransacoesReponse transacoesReponse = new TransacoesReponse(usuario.getLimite(), usuario.getSaldo());
+        TransacoesReponse transacoesReponse = new TransacoesReponse(usuarios.getLimite(), usuarios.getSaldo());
 
         return transacoesReponse;
     }
 
-    public ExtratoResponse processExtrato(String id){
-        Usuario usuario = usuarioRepository.findById(id)
-                                           .orElseThrow(() -> new ResourceAccessException("usuário não encontrado"));
+    public ExtratoResponse processExtrato(Long id){
+        Usuarios usuarios = usuariosRepository.findById(id)
+                                              .orElseThrow(() -> new ResourceAccessException("usuário não encontrado"));
 
         List<UltimasTransacoes> ultimasTransacoes = ultimasTransacoesRepository.findTop10ByUsuarioIdOrderByRealizadaEmDesc(id);
 
-        Saldo saldo = new Saldo(usuario.getSaldo(), DateUtils.formatLocalDateTimeToString(LocalDateTime.now()), usuario.getLimite());
+        Saldo saldo = new Saldo(usuarios.getSaldo(), DateUtils.formatLocalDateTimeToString(LocalDateTime.now()), usuarios.getLimite());
 
         List<UltimasTransacoesDto> ultimasTransacoesDto = new ArrayList<>();
         ultimasTransacoes.forEach(ut -> ultimasTransacoesDto.add(new UltimasTransacoesDto(ut.getValor(), ut.getTipo(), ut.getDescricao(), DateUtils.formatLocalDateTimeToString(ut.getRealizadaEm()))));
@@ -71,21 +71,21 @@ public class ClientesService {
         }
     }
 
-    private Usuario processTransaction(Usuario usuario, TransacoesRequest body) {
+    private Usuarios processTransaction(Usuarios usuarios, TransacoesRequest body) {
         if(body.getTipo().equals("c")){
-            usuario.setSaldo(usuario.getSaldo() + body.getValor().longValue());
+            usuarios.setSaldo(usuarios.getSaldo() + body.getValor().longValue());
         } else if (body.getTipo().equals("d")) {
-            usuario.setSaldo(usuario.getSaldo() - body.getValor()
-                                                      .longValue());
+            usuarios.setSaldo(usuarios.getSaldo() - body.getValor()
+                                                        .longValue());
         }
 
-        if(usuario.getLimite() + usuario.getSaldo() < 0){
+        if(usuarios.getLimite() + usuarios.getSaldo() < 0){
             throw new IllegalArgumentException("saldo insuficiente");
         }
 
-        UltimasTransacoes ultimasTransacoes = new UltimasTransacoes(usuario.getId(), body.getValor().longValue(), body.getTipo(), body.getDescricao(), LocalDateTime.now());
+        UltimasTransacoes ultimasTransacoes = new UltimasTransacoes(Long.parseLong(usuarios.getId()), body.getValor().longValue(), body.getTipo(), body.getDescricao(), LocalDateTime.now());
         ultimasTransacoesRepository.save(ultimasTransacoes);
 
-        return usuarioRepository.save(usuario);
+        return usuariosRepository.save(usuarios);
     }
 }

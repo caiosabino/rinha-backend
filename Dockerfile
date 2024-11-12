@@ -1,11 +1,10 @@
 # Etapa 1: Build
 FROM gradle:7.5.1-jdk17 AS build
 WORKDIR /app
-
 # Copia todos os arquivos do projeto para o diretório de trabalho do contêiner
 COPY . .
 # Executa o build do Gradle para gerar o arquivo .jar
-RUN gradle build --no-daemon
+RUN gradle clean build
 
 # Etapa 2: Runtime
 FROM openjdk:17-jdk-slim

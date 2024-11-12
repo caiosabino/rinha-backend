@@ -4,4 +4,4 @@ spring:
 
   data:
     mongodb:
-      uri: mongodb://root:example@localhost:27017/rinha_db?authSource=admin
+      uri: mongodb://${DB_USER}:${DB_PASS}@localhost:27017/rinha_db?authSource=admin

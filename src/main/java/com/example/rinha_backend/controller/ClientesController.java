@@ -22,19 +22,19 @@ public class ClientesController {
 
     @PostMapping("/{id}/transacoes")
     @ResponseStatus(HttpStatus.OK)
-    public TransacoesReponse transacoes(@PathVariable String id, @RequestBody TransacoesRequest body) {
+    public TransacoesReponse transacoes(@PathVariable Long id, @RequestBody TransacoesRequest body) {
         validateId(id);
         return clientesService.processTransacao(id, body);
     }
 
     @GetMapping("/{id}/extrato")
-    public ExtratoResponse extrato(@PathVariable String id) {
+    public ExtratoResponse extrato(@PathVariable Long id) {
         validateId(id);
         return clientesService.processExtrato(id);
     }
 
-    private void validateId(String id) {
-        if(id == null || id.isEmpty() || Long.parseLong(id) < 1){
+    private void validateId(Long id) {
+        if(id == null || id < 1){
             throw new IllegalArgumentException("id inválido");
         }
     }

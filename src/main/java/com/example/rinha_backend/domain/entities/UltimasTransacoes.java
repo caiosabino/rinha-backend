@@ -3,18 +3,17 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-
 @Document(collection = "ultimas_transacoes")
 public class UltimasTransacoes {
     @Id
     private String id;
-    private String usuarioId;
+    private Long usuarioId;
     private Long valor;
     private String tipo;
     private String descricao;
     private LocalDateTime realizadaEm;
 
-    public UltimasTransacoes(String usuarioId, Long valor, String tipo, String descricao, LocalDateTime realizadaEm) {
+    public UltimasTransacoes(Long usuarioId, Long valor, String tipo, String descricao, LocalDateTime realizadaEm) {
         this.usuarioId = usuarioId;
         this.valor = valor;
         this.tipo = tipo;
@@ -30,11 +29,11 @@ public class UltimasTransacoes {
         this.id = id;
     }
 
-    public String getUsuarioId() {
+    public Long getUsuarioId() {
         return usuarioId;
     }
 
-    public void setUsuarioId(String usuarioId) {
+    public void setUsuarioId(Long usuarioId) {
         this.usuarioId = usuarioId;
     }
 

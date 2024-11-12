@@ -5,5 +5,5 @@ import java.util.List;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 public interface UltimasTransacoesRepository extends MongoRepository<UltimasTransacoes, String> {
-    List<UltimasTransacoes> findTop10ByUsuarioIdOrderByRealizadaEmDesc(String id);
+    List<UltimasTransacoes> findTop10ByUsuarioIdOrderByRealizadaEmDesc(Long id);
 }
