@@ -2,14 +2,14 @@ package com.example.rinha_backend.domain.entities;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
-@Document(collection = "usuarios")
-public class Usuarios {
+@Document(collection = "clientes")
+public class Clientes {
     @MongoId
     private Long id;
     private Long limite;
     private Long saldo;
 
-    public Usuarios(Long id, Long limite, Long saldo) {
+    public Clientes(Long id, Long limite, Long saldo) {
         this.id = id;
         this.limite = limite;
         this.saldo = saldo;

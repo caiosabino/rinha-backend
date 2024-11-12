@@ -2,7 +2,7 @@ services:
   mongodb:
     image: mongo:latest
     container_name: mongodb
-    env_file: /Users/csabino/Documents/workspace/dev.env
+    env_file: ./.env
     environment:
       MONGO_INITDB_DATABASE: rinha_db
       MONGO_INITDB_ROOT_USERNAME: $DB_USER
@@ -53,11 +53,14 @@ services:
     ports:
       # Obrigatório expor/usar a porta 9999 no load balancer!
       - "9999:9999"
+    networks:
+      - app-network
     deploy:
       resources:
         limits:
           cpus: "0.17"
           memory: "10MB"
+
 
 networks:
   app-network:

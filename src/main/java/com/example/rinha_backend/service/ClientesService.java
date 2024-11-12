@@ -1,7 +1,7 @@
 package com.example.rinha_backend.service;
 
 import com.example.rinha_backend.domain.entities.UltimasTransacoes;
-import com.example.rinha_backend.domain.entities.Usuarios;
+import com.example.rinha_backend.domain.entities.Clientes;
 import com.example.rinha_backend.dto.extrato.ExtratoResponse;
 import com.example.rinha_backend.dto.extrato.Saldo;
 import com.example.rinha_backend.dto.extrato.UltimasTransacoesDto;
@@ -27,23 +27,23 @@ public class ClientesService {
     public TransacoesReponse processTransacao(Long id, TransacoesRequest body){
         body.validateBodyParameters();
 
-        Usuarios usuarios = usuariosService.findById(id)
+        Clientes clientes = usuariosService.findById(id)
                                            .orElseThrow(() -> new ResourceAccessException("usuário não encontrado"));;
 
-        usuarios = doTransacao(usuarios, body);
+        clientes = doTransacao(clientes, body);
 
-        TransacoesReponse transacoesReponse = new TransacoesReponse(usuarios.getLimite(), usuarios.getSaldo());
+        TransacoesReponse transacoesReponse = new TransacoesReponse(clientes.getLimite(), clientes.getSaldo());
 
         return transacoesReponse;
     }
 
     public ExtratoResponse processExtrato(Long id){
-        Usuarios usuarios = usuariosService.findById(id)
+        Clientes clientes = usuariosService.findById(id)
                                            .orElseThrow(() -> new ResourceAccessException("usuário não encontrado"));
 
         List<UltimasTransacoes> ultimasTransacoes = ultimasTransacoesService.findTop10ByUsuarioIdOrderByRealizadaEmDesc(id);
 
-        Saldo saldo = new Saldo(usuarios.getSaldo(), DateUtils.formatLocalDateTimeToString(LocalDateTime.now()), usuarios.getLimite());
+        Saldo saldo = new Saldo(clientes.getSaldo(), DateUtils.formatLocalDateTimeToString(LocalDateTime.now()), clientes.getLimite());
 
         List<UltimasTransacoesDto> ultimasTransacoesDto = new ArrayList<>();
         ultimasTransacoes.forEach(ut -> ultimasTransacoesDto.add(new UltimasTransacoesDto(ut.getValor(), ut.getTipo(), ut.getDescricao(), DateUtils.formatLocalDateTimeToString(ut.getRealizadaEm()))));
@@ -51,23 +51,23 @@ public class ClientesService {
         return new ExtratoResponse(saldo, ultimasTransacoesDto);
     }
 
-    private Usuarios doTransacao(Usuarios usuarios, TransacoesRequest body) {
+    private Clientes doTransacao(Clientes clientes, TransacoesRequest body) {
         if(body.getTipo().equals("c")){
-            usuarios.setSaldo(usuarios.getSaldo() + body.getValor().longValue());
+            clientes.setSaldo(clientes.getSaldo() + body.getValor().longValue());
         } else if (body.getTipo().equals("d")) {
-            usuarios.setSaldo(usuarios.getSaldo() - body.getValor()
+            clientes.setSaldo(clientes.getSaldo() - body.getValor()
                                                         .longValue());
         }
 
-        if(usuarios.getLimite() + usuarios.getSaldo() < 0){
+        if(clientes.getLimite() + clientes.getSaldo() < 0){
             throw new IllegalArgumentException("saldo insuficiente");
         }
 
-        Long ultimasTranscoesId = generateUltimasTransacoesLastId(usuarios.getId());
-        UltimasTransacoes ultimasTransacoes = new UltimasTransacoes(ultimasTranscoesId, usuarios.getId(), body.getValor().longValue(), body.getTipo(), body.getDescricao(), LocalDateTime.now());
+        Long ultimasTranscoesId = generateUltimasTransacoesLastId(clientes.getId());
+        UltimasTransacoes ultimasTransacoes = new UltimasTransacoes(ultimasTranscoesId, clientes.getId(), body.getValor().longValue(), body.getTipo(), body.getDescricao(), LocalDateTime.now());
         ultimasTransacoesService.save(ultimasTransacoes);
 
-        return usuariosService.save(usuarios);
+        return usuariosService.save(clientes);
     }
 
     private Long generateUltimasTransacoesLastId(Long usuarioId) {

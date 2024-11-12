@@ -11,7 +11,7 @@ db.createUser(
     }
 )
 
-db.usuarios.insertMany([
+db.clientes.insertMany([
     { _id: 1, limite: 100000, saldo: 0 },
     { _id: 2, limite: 80000, saldo: 0 },
     { _id: 3, limite: 1000000, saldo: 0 },
