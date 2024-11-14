@@ -1,6 +1,5 @@
 package com.example.rinha_backend.domain.entities;
 import java.time.LocalDateTime;
-import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.MongoId;
 
