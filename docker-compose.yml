@@ -19,6 +19,18 @@ services:
         limits:
           cpus: "0.13"
           memory: "500MB"
+#
+#  rabbitmq:
+#    image: rabbitmq:3-management  # RabbitMQ com o plugin de gerenciamento
+#    container_name: rabbitmq
+#    ports:
+#      - "5672:5672"  # Porta padrão para conexões AMQP
+#      - "15672:15672"  # Porta do painel de gerenciamento
+#    environment:
+#      RABBITMQ_DEFAULT_USER: guest  # Usuário padrão
+#      RABBITMQ_DEFAULT_PASS: guest  # Senha padrão
+#    volumes:
+#      - rabbitmq-data:/var/lib/rabbitmq  # Persistência de dados
 
   app1:
     build:
@@ -83,3 +95,4 @@ networks:
 volumes:
   mongo_data:
     driver: local
+  rabbitmq-data:
